@@ -67,7 +67,13 @@ expression: (value | arithmetic) relop (value | arithmetic);
 
 array_item: VARIABLE '[' (variable_number_text | unary_arithmetic) ']';
 
-array_operation: value '.' 'concat' '(' (value | array_item) (
+array_length: VARIABLE '.' 'length';
+
+array: '[' value? ( '.' value)* ']';
+
+array_operation: VARIABLE '.' ('push' | 'pop') '(' (value | array_item)+ ')';
+
+array_concatenation: value '.' 'concat' '(' (value | array_item) (
 	',' (value | array_item)
 	)* ')';
 
