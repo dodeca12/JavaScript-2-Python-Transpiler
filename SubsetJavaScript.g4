@@ -18,7 +18,7 @@ statement: (
 		| console_log
 	);
 
-condition: express (relop expression)*;
+condition: expression (relop expression)*;
 
 conditional_statement:
 	IF '(' condition ')' '{' NEWLINE* line+ '}';
@@ -42,7 +42,7 @@ assignment: (VAR | CONST | LET) VARIABLE '=' value;
 reassignment: VARIABLE '=' (VARIABLE | value);
 
 function: (
-		FUNCTION_VARIABLE? '(' value* ')' '{' NEWLINE* line+ '}' ';'? NEWLINE+
+		FUNCTION VARIABLE? '(' value* ')' '{' NEWLINE* line+ '}' ';'? NEWLINE+
 	);
 
 function_call: VARIABLE '(' value* ')';
