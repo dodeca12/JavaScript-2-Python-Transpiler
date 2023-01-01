@@ -293,3 +293,6 @@ $RECYCLE.BIN/
 
 # ANTLR
 .antlr
+
+# output.py
+.gitignore

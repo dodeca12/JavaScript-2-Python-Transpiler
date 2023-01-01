@@ -89,7 +89,14 @@ while_loop:
 		| (BREAK NEWLINE)
 	) '}';
 
-for_loop: (assignment | reassignment) ';' condition ';' arithmetic;
+for_loop: FOR '(' for_loop_statement ')' '{' NEWLINE*
+	(
+		line+
+		| (BREAK NEWLINE)
+	)
+	'}';
+
+for_loop_statement: (assignment | reassignment) ';' condition ';' arithmetic;
 
 // Lexer rules
 
