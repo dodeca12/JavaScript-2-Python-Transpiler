@@ -1,22 +1,5 @@
-# JavaScript 2 Python Transpiler
+#!/bin/bash
 
-This project is an exploration in using [ANTLR4](https://antlr.org) grammars to create a simple transpiler that converts a subset of JavaScript lexical grammar to valid Python3 grammar.
-
-## Prerequisites
-
-- Java
-- ANTLR4
-- Python3
-- make
-- pip (optional)
-- Node.js (optional, to run and verify JavaScript programs that will be transpiled to Python)
-
-## ANTLR4 setup
-
-ANTLR needs a bit of setup, run the following commands:
-
-```bash
-# Install ANTLR4
 curl --remote-name https://www.antlr.org/download/antlr-4.11.1-complete.jar
 sudo mv antlr4.11.1-complete.jar /usr/local/lib
 
@@ -31,6 +14,3 @@ else
     'alias grun='java org.antlr.v4.gui.TestRig'' >> ~/.bashrc
     source ~/.bashrc
 fi
-```
-
-Alternatively, you can just run [antlr-setup.sh](antlr-setup.sh).
