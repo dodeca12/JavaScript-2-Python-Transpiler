@@ -4,7 +4,7 @@ grammar SubsetJavaScript;
 
 program: (line | function)+ EOF;
 
-line: (ternary_statement | statement | conditional_statement) ';'? NEWLINE+;
+line: (ternary_statement | statement | conditional_statement | if_statement) ';'? NEWLINE+;
 
 statement: (
 		assignment
@@ -21,7 +21,9 @@ statement: (
 condition: expression (relop expression)*;
 
 conditional_statement:
-	IF '(' condition ')' '{' NEWLINE* line+ '}';
+	IF '(' condition ')' '{' NEWLINE* line+ '}' (ELSEIF '(' condition ')' '{' NEWLINE* line+ '}')* (ELSE '{' NEWLINE* line+ '}')?;
+
+if_statement: IF '(' condition ')' '{' NEWLINE* line+ '}' (ELSE '{' NEWLINE* line+ '}')?;
 
 ternary_statement: expression '?' statement ':' statement;
 
@@ -112,6 +114,7 @@ CONST: 'const';
 LET: 'let';
 IF: 'if';
 ELSE: 'else';
+ELSEIF: 'else if';
 LESS_THAN: '<';
 LESS_THAN_EQUAL: '<=';
 GREATER_THAN: '>';

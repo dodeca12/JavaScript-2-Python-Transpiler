@@ -296,3 +296,10 @@ $RECYCLE.BIN/
 
 # output.py
 .gitignore
+
+
+# vscode
+.vscode
+
+# output.py
+output.py

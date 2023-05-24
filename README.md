@@ -1,7 +1,6 @@
 # JavaScript 2 Python Transpiler
 
-
-## :building_construction: :warning: :construction: Project is currently a work in progress, is half finished, and has many many bugs :warning:
+## :building_construction: :warning: :construction: Project is currently a work in progress :warning:
 
 This project is an exploration in using [ANTLR4](https://antlr.org) grammars to create a simple transpiler that converts a subset of JavaScript lexical grammar to valid Python3 grammar.
 
@@ -37,3 +36,11 @@ fi
 ```
 
 Alternatively, you can just run [antlr-setup.sh](antlr-setup.sh).
+
+### Current Progress
+
+- [x] `console.log()` to `print()`
+
+| [`hello-world.js`](hello-world.js) | `output.py`            |
+| ---------------------------------- | ---------------------- |
+| `console.log("Hello World!")`       | `print("Hello World!")` |
