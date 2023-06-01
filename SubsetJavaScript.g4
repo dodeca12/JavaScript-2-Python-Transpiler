@@ -20,15 +20,10 @@ statement: (
 
 condition: expression (relop expression)*;
 
-conditional_statement: if_statement (else_if_statement)* (else_statement)?;
+conditional_statement:
+	IF '(' condition ')' '{' NEWLINE* line+ '}' (ELSE_IF '(' condition ')' '{' NEWLINE* line+ '}')* (ELSE '{' NEWLINE* line+ '}')?;
 
-if_statement: IF '(' condition ')' block;
-
-else_if_statement: ELSE IF '(' condition ')' block;
-
-else_statement: ELSE block;
-
-block: '{' NEWLINE* line+ '}';
+if_statement: IF '(' condition ')' '{' NEWLINE* line+ '}' (ELSE '{' NEWLINE* line+ '}')?;
 
 ternary_statement: expression '?' statement ':' statement;
 
@@ -119,7 +114,7 @@ CONST: 'const';
 LET: 'let';
 IF: 'if';
 ELSE: 'else';
-ELSEIF: 'else if';
+ELSE_IF: 'else if';
 LESS_THAN: '<';
 LESS_THAN_EQUAL: '<=';
 GREATER_THAN: '>';
