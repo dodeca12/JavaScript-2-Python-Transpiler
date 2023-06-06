@@ -8,6 +8,7 @@ line: (ternary_statement | statement | conditional_statement | if_statement) ';'
 
 statement: (
 		assignment
+		| reassignment
 		| arithmetic
 		| array_operation
 		| array_concatenation
@@ -20,10 +21,15 @@ statement: (
 
 condition: expression (relop expression)*;
 
-conditional_statement:
-	IF '(' condition ')' '{' NEWLINE* line+ '}' (ELSE_IF '(' condition ')' '{' NEWLINE* line+ '}')* (ELSE '{' NEWLINE* line+ '}')?;
+conditional_statement: if_statement (else_if_statement)* (else_statement)?;
 
-if_statement: IF '(' condition ')' '{' NEWLINE* line+ '}' (ELSE '{' NEWLINE* line+ '}')?;
+if_statement: IF '(' condition ')' block;
+
+else_if_statement: ELSE_IF '(' condition ')' block;
+
+else_statement: ELSE block;
+
+block: '{' NEWLINE* line+ '}';
 
 ternary_statement: expression '?' statement ':' statement;
 
