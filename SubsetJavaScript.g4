@@ -23,13 +23,13 @@ condition: expression (relop expression)*;
 
 conditional_statement: if_statement (else_if_statement)* (else_statement)?;
 
-if_statement: IF '(' condition ')' block;
+if_statement: IF '(' condition ')' conditional_block;
 
-else_if_statement: ELSE_IF '(' condition ')' block;
+else_if_statement: ELSE_IF '(' condition ')' conditional_block;
 
-else_statement: ELSE block;
+else_statement: ELSE conditional_block;
 
-block: '{' NEWLINE* line+ '}';
+conditional_block: '{' NEWLINE* line+ '}';
 
 ternary_statement: expression '?' statement ':' statement;
 
@@ -91,20 +91,19 @@ array_concatenation:
 
 console_log: CONSOLE '.log' '(' value ( ',' value)* ')';
 
-while_loop:
-	WHILE '(' condition ')' '{' NEWLINE* (
-		line+
-		| (BREAK NEWLINE)
-	) '}';
+while_loop: WHILE '(' condition ')' loop_block;
 
-for_loop: FOR '(' for_loop_statement ')' '{' NEWLINE*
+for_loop: FOR '(' for_loop_statement ')' loop_block;
+
+for_loop_statement: (assignment | reassignment) ';' condition ';' arithmetic;
+
+loop_block: '{'
+	NEWLINE*
 	(
 		line+
 		| (BREAK NEWLINE)
 	)
 	'}';
-
-for_loop_statement: (assignment | reassignment) ';' condition ';' arithmetic;
 
 // Lexer rules
 
