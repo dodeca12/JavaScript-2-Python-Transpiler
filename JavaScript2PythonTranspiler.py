@@ -7,6 +7,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
         self.output = output
         self.indent_level = 0
         self.loop_condition_flag = False
+        self.current_line_last_line_of_conditional_statement = False
 
     # Enter a parse tree produced by SubsetJavaScriptParser#line.
     def enterLine(self, ctx:SubsetJavaScriptParser.LineContext):
@@ -14,6 +15,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Exit a parse tree produced by SubsetJavaScriptParser#line.
     def exitLine(self, ctx:SubsetJavaScriptParser.LineContext):
+        # if not self.current_line_last_line_of_conditional_statement:
         self.output.write("\n")
 
     # Enter a parse tree produced by SubsetJavaScriptParser#unary_arithmetic.
@@ -52,6 +54,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     def exitCondition(self, ctx:SubsetJavaScriptParser.ConditionContext):
         if not self.loop_condition_flag:
+            # pass
             self.output.write(":\n")
         
 
@@ -61,21 +64,44 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Enter a parse tree produced by SubsetJavaScriptParser#conditional_statement.
     def enterConditional_statement(self, ctx:SubsetJavaScriptParser.Conditional_statementContext):
-        self.output.write("%s " % (ctx.IF()))
-        
         self.indent_level += 1
 
     # Exit a parse tree produced by SubsetJavaScriptParser#conditional_statement.
     def exitConditional_statement(self, ctx:SubsetJavaScriptParser.Conditional_statementContext):
         self.indent_level -= 1
 
+    # Enter a parse tree produced by SubsetJavaScriptParser#if_statement.
+    def enterIf_statement(self, ctx:SubsetJavaScriptParser.If_statementContext):
+        self.current_line_last_line_of_conditional_statement = False
+        self.output.write("%s " % (ctx.IF()))
+        # self.current_line_last_line_of_conditional_statement = True
+
+    def exitIf_statement(self, ctx:SubsetJavaScriptParser.If_statementContext):
+        self.current_line_last_line_of_conditional_statement = True
+
+    # Enter a parse tree produced by SubsetJavaScriptParser#else_if_statement. 
+    def enterElse_if_statement(self, ctx:SubsetJavaScriptParser.Else_if_statementContext):
+        self.current_line_last_line_of_conditional_statement = False
+        self.output.write("%s " % ("elif"))
+
+    # Enter a parse tree produced by SubsetJavaScriptParser#else_statement.
+    def enterElse_statement(self, ctx:SubsetJavaScriptParser.Else_statementContext):
+        self.output.write("%s: \n" % (ctx.ELSE()))
+
+
+    # # Exit a parse tree produced by SubsetJavaScriptParser#else_statement.
+    # def exitElse_statement(self, ctx:SubsetJavaScriptParser.Else_statementContext):
+    #     # if not self.loop_condition_flag:
+    #     # self.output.write("\n")
+
+
 
     # Enter a parse tree produced by SubsetJavaScriptParser#ternary_statement.
-    def enterTernary_statement(self, ctx:SubsetJavaScriptParser.Ternary_statementContext):
-        self.output.write("%s if %s else %s" % (
-            ctx.statement()[0].getText().replace("push","append"),
-            ctx.expression().getText(),
-            ctx.statement()[1].getText().replace("push","append")))
+    # def enterTernary_statement(self, ctx:SubsetJavaScriptParser.Ternary_statementContext):
+    #     self.output.write("%s if %s else %s" % (
+    #         ctx.statement()[0].getText().replace("push","append"),
+    #         ctx.expression().getText(),
+    #         ctx.statement()[1].getText().replace("push","append")))
 
     # Exit a parse tree produced by SubsetJavaScriptParser#ternary_statement.
     def exitTernary_statement(self, ctx:SubsetJavaScriptParser.Ternary_statementContext):
@@ -95,7 +121,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
             if len(ctx.VARIABLE()) > 1:
                 self.output.write("%s = %s" % (ctx.VARIABLE()[0],ctx.VARIABLE()[1]))
             else:
-                self.output.write("%s = %s" % (ctx.VARIABLE(),ctx.value().getText()))
+                self.output.write("%s = %s" % (ctx.VARIABLE()[0],ctx.value().getText()))
  
 
     # Enter a parse tree produced by SubsetJavaScriptParser#Array_concatenation.
@@ -115,7 +141,8 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
         # Function name
         self.output.write("%s(" % (ctx.VARIABLE()))
 
-        self.output.write("%s" % (ctx.value()[0].getText()))
+        if (len(ctx.value())):
+            self.output.write("%s" % (ctx.value()[0].getText()))
 
         # End the function definition
         self.output.write("):\n")
@@ -157,11 +184,12 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Exit a parse tree produced by SubsetJavaScriptParser#while_loop.
     def exitWhile_loop(self, ctx:SubsetJavaScriptParser.While_loopContext):
-        self.indent_level -= 1
+        # self.indent_level -= 1
+        pass
 
     def enterFor_loop(self, ctx: SubsetJavaScriptParser.For_loopContext):
         self.output.write("for ")
-        self.indent_level += 1
+        # self.indent_level += 1
         pass
 
     def enterFor_loop_statement(self, ctx: SubsetJavaScriptParser.For_loop_statementContext):
@@ -182,4 +210,13 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     def exitFor_loop_statement(self, ctx: SubsetJavaScriptParser.For_loop_statementContext):
         self.loop_condition_flag = False
+        # self.indent_level -= 1
+
+    def enterLoop_block_statement(self,ctx:SubsetJavaScriptParser.Loop_blockContext):
+        print("got here")
+        self.indent_level += 1
+
+    def exitLoop_block_statement(self,ctx:SubsetJavaScriptParser.Loop_blockContext):
+        print("got here")
+        self.indent_level -= 1
 
