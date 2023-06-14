@@ -126,7 +126,7 @@ LESS_THAN: '<';
 LESS_THAN_EQUAL: '<=';
 GREATER_THAN: '>';
 GREATER_THAN_EQUAL: '>=';
-EQUALS: '=';
+EQUALS: '==';
 NOT_EQUALS: '!=';
 CONSOLE: 'console';
 LOG: 'log';
