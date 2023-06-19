@@ -26,7 +26,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
             elif ctx.UNARY_DECREMENT() != None:
                 self.output.write("%s -= 1" % (ctx.VARIABLE()))
 
-    # Enter a parse tree produced by SubsetJavaScriptParser#condition.
+    # Enter a parse tree produced by SubsetJavaScriptParser#expression.
     def exitExpression(self, ctx: SubsetJavaScriptParser.ExpressionContext):
         if not self.ternary_statement_flag:
             text = ""
@@ -189,12 +189,10 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
                     printedContent += ','
                 first = False
                 printedContent += node.getText()
-
             self.output.write("print(%s)\n" % (printedContent))
 
     def enterStatement(self, ctx: SubsetJavaScriptParser.StatementContext):
         if isinstance(ctx.parentCtx, SubsetJavaScriptParser.Ternary_statementContext):
-            # self.output.write("%s" % ("\t" * self.indent_level))
             self.ternary_statement_flag = True
 
     # Enter a parse tree produced by SubsetJavaScriptParser#while_loop.
@@ -237,3 +235,6 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
     # Exit a parse tree produced by SubsetJavaScriptParser#loop_block.
     def exitLoop_block(self, ctx: SubsetJavaScriptParser.Loop_blockContext):
         self.indent_level -= 1
+
+    # def enterBoolean(self, ctx: SubsetJavaScriptParser.BooleanContext):
+    #     print("got here")
