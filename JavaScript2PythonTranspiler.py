@@ -69,7 +69,6 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
             self.output.write("%s" % (ctx.getText()))
 
     # Enter a parse tree produced by SubsetJavaScriptParser#condition.
-
     def enterCondition(self, ctx: SubsetJavaScriptParser.ConditionContext):
         if len(ctx.children[0].value()) > 1 and (ctx.children[0].value()[1].getText() == "true" or ctx.children[0].value()[1].getText() == "false"):
             self.bool_condition = True
@@ -79,7 +78,6 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
             self.output.write(" %s):\n" % (range_end_idx))
 
     # Exit a parse tree produced by SubsetJavaScriptParser#condition.
-
     def exitCondition(self, ctx: SubsetJavaScriptParser.ConditionContext):
         if self.bool_condition:
             self.bool_condition = False
