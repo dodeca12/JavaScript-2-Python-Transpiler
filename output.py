@@ -1,16 +1,11 @@
-x = 6
-y = 0
-lorem_ipsum = "hello"
-x = y
-def function_name():
-	print("This is a function")
+x = 5
+while x>0:
+	print(x)
+	x -= 1
 
-	for z in range(0, 6):
-	print(z)
+while x==0:
+	print("x is 0")
 
-	print("This is a loop")
-
-
-	if z>5:
-		lorem_ipsum = "new text"
+while True:
+	print("true")
 

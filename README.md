@@ -10,7 +10,7 @@ This project is an exploration in using [ANTLR4](https://antlr.org) grammars to 
 - ANTLR4
 - Python3
 - make
-- pip (optional)
+- venv (optional)
 - Node.js (optional, to run and verify JavaScript programs that will be transpiled to Python)
 
 ## ANTLR4 setup
@@ -39,8 +39,9 @@ Alternatively, you can just run [antlr-setup.sh](antlr-setup.sh).
 
 ### Current Progress
 
-- [x] `console.log()` to `print()`
-
-| [`hello-world.js`](hello-world.js) | `output.py`            |
-| ---------------------------------- | ---------------------- |
-| `console.log("Hello World!")`       | `print("Hello World!")` |
+- [x] `console.log()` to `print()` ([`hello-world.js`](./examples/hello-world.js))
+- [x] variable assignment supporting `let`, `var` and `const` ([`variable-assignment.js`](./examples/variable-assignment.js))
+- [x] variable reassignment ([`variable-reassignment.js`](./examples/variable-reassignment.js))
+- [x] arithmetic (supporting addition `+`, subtraction `-`, multiplication `*`, division `/`, modulus `%`, exponentiation `**`, increment `++`, decrement `--`) ([`arithmetic.js`](./examples/arithmetic.js))
+- [x] array declaration, access, concatenation, push, pop, and length ([`array.js`](./examples/array.js))
+- [x] while loop ([`while-loop.js`](./examples/while-loop.js))
