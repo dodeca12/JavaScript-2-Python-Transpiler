@@ -1,4 +1,3 @@
-import sys
 from SubsetJavaScriptListener import SubsetJavaScriptListener
 from SubsetJavaScriptParser import SubsetJavaScriptParser
 
@@ -36,7 +35,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
             elif ctx.UNARY_DECREMENT() != None:
                 self.output.write("%s -= 1" % (ctx.VARIABLE()))
 
-    # Enter a parse tree produced by SubsetJavaScriptParser#expression. 
+    # Enter a parse tree produced by SubsetJavaScriptParser#expression.
     def enterExpression(self, ctx: SubsetJavaScriptParser.ExpressionContext):
         if self.bool_condition:
             for i in range(len(ctx.children)-1):
@@ -64,13 +63,13 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
                 _temp = "True" if ctx.getText() == "true" else "False"
                 self.output.write("%s" % (_temp))
             else:
-                self.output.write("%s" % (ctx.getText())) 
+                self.output.write("%s" % (ctx.getText()))
 
         if isinstance(ctx.parentCtx, SubsetJavaScriptParser.Array_operationContext):
             self.output.write("%s" % (ctx.getText()))
 
-
     # Enter a parse tree produced by SubsetJavaScriptParser#condition.
+
     def enterCondition(self, ctx: SubsetJavaScriptParser.ConditionContext):
         if len(ctx.children[0].value()) > 1 and (ctx.children[0].value()[1].getText() == "true" or ctx.children[0].value()[1].getText() == "false"):
             self.bool_condition = True
@@ -78,9 +77,9 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
         if isinstance(ctx.parentCtx, SubsetJavaScriptParser.For_loop_statementContext):
             range_end_idx = ctx.expression()[0].value()[1].getText()
             self.output.write(" %s):\n" % (range_end_idx))
-        
 
     # Exit a parse tree produced by SubsetJavaScriptParser#condition.
+
     def exitCondition(self, ctx: SubsetJavaScriptParser.ConditionContext):
         if self.bool_condition:
             self.bool_condition = False
@@ -99,18 +98,6 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
     def exitValue(self, ctx: SubsetJavaScriptParser.ValueContext):
         if ctx.array_length():
             ctx.text = f"len({ctx.array_length().VARIABLE()})"
-        
-    # # Enter a parse tree produced by SubsetJavaScriptParser#array
-    # def enterArray(self, ctx: SubsetJavaScriptParser.ArrayContext):
-    #     if not self.ternary_statement_flag:
-    #         self.output.write("[")
-    #         if ctx.array_elements():
-    #             self.output.write(ctx.array_elements().getText())
-        
-    # # Exit a parse tree produced by SubsetJavaScriptParser#array
-    # def exitArray(self, ctx: SubsetJavaScriptParser.ArrayContext):
-    #     if not self.ternary_statement_flag:
-    #         self.output.write("]")
 
     # Enter a parse tree produced by SubsetJavaScriptParser#if_statement.
     def enterIf_statement(self, ctx: SubsetJavaScriptParser.If_statementContext):
@@ -134,7 +121,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
     def enterElse_statement(self, ctx: SubsetJavaScriptParser.Else_statementContext):
         self.output.write("%s%s: \n" % ('\t' * self.indent_level, ctx.ELSE()))
 
-    # Enter a parse tree produced by SubsetJavaScriptParser#conditional_block. 
+    # Enter a parse tree produced by SubsetJavaScriptParser#conditional_block.
     def enterConditional_block(self, ctx: SubsetJavaScriptParser.Conditional_blockContext):
         self.indent_level += 1
 
@@ -176,9 +163,12 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
     # Enter a parse tree produced by SubsetJavaScriptParser#assignment.
     def enterAssignment(self, ctx: SubsetJavaScriptParser.AssignmentContext):
         if not self.ternary_statement_flag:
-            has_function_call = ctx.value() and len(ctx.children) == 4 and "<class 'SubsetJavaScriptParser.SubsetJavaScriptParser.Function_callContext'>" == str(ctx.children[3].children[0].__class__)
-            has_boolean = ctx.value() and (ctx.value().getText() == "true" or ctx.value().getText() == "false")
-            has_array_length = ctx.value() and "<class 'SubsetJavaScriptParser.SubsetJavaScriptParser.Array_lengthContext'>" == str(ctx.children[-1].children[-1].__class__)
+            has_function_call = ctx.value() and len(
+                ctx.children) == 4 and "<class 'SubsetJavaScriptParser.SubsetJavaScriptParser.Function_callContext'>" == str(ctx.children[3].children[0].__class__)
+            has_boolean = ctx.value() and (ctx.value().getText() ==
+                                           "true" or ctx.value().getText() == "false")
+            has_array_length = ctx.value() and "<class 'SubsetJavaScriptParser.SubsetJavaScriptParser.Array_lengthContext'>" == str(
+                ctx.children[-1].children[-1].__class__)
             has_number_or_text = ctx.value() and len(ctx.children) == 4
 
             if has_function_call:
@@ -187,7 +177,8 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
                 pass
             elif has_boolean:
                 _temp = "True" if ctx.value().getText() == "true" else "False"
-                self.output.write("%s = %s" % (ctx.VARIABLE().getText(), _temp))
+                self.output.write("%s = %s" %
+                                  (ctx.VARIABLE().getText(), _temp))
                 pass
             elif has_array_length:
                 self.output.write("%s = %s" % (
@@ -210,8 +201,10 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
             # else:
             #     self.output.write("%s = %s" %
             #                       (ctx.VARIABLE()[0], ctx.value().getText()))
-            has_function_call = ctx.value() and len(ctx.children) == 3 and "<class 'SubsetJavaScriptParser.SubsetJavaScriptParser.Function_callContext'>" == str(ctx.children[2].children[0].__class__)
-            has_boolean = ctx.value() and (ctx.value().getText() == "true" or ctx.value().getText() == "false")
+            has_function_call = ctx.value() and len(
+                ctx.children) == 3 and "<class 'SubsetJavaScriptParser.SubsetJavaScriptParser.Function_callContext'>" == str(ctx.children[2].children[0].__class__)
+            has_boolean = ctx.value() and (ctx.value().getText() ==
+                                           "true" or ctx.value().getText() == "false")
             has_array_length = ctx.value() and ctx.value().array_length()
             has_number_or_text = ctx.value() and len(ctx.children) == 3
 
@@ -221,7 +214,8 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
                 pass
             elif has_boolean:
                 _temp = "True" if ctx.value().getText() == "true" else "False"
-                self.output.write("%s = %s" % (ctx.VARIABLE().getText(), _temp))
+                self.output.write("%s = %s" %
+                                  (ctx.VARIABLE().getText(), _temp))
                 pass
             elif has_array_length:
                 self.output.write("%s = %s" % (
@@ -302,7 +296,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
         self.console_log_statement = True
         if ctx.arithmetic():
             self.output.write("print(")
-            
+
         elif not self.ternary_statement_flag:
             valueNodes = ctx.value()
             printedContent = ""
@@ -376,5 +370,3 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
         if self.while_loop_flag or self.if_statement and not self.return_flag:
             _temp = "True" if ctx.getText() == "true" else "False"
             self.output.write("%s:\n" % (_temp))
- 
-
