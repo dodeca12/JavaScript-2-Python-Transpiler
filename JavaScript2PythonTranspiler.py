@@ -12,6 +12,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
         self.while_loop_flag = False
         self.bool_condition = False
         self.return_flag = False
+        self.console_log_statement = False
 
     # Enter a parse tree produced by SubsetJavaScriptParser#line.
     def enterLine(self, ctx: SubsetJavaScriptParser.LineContext):
@@ -29,7 +30,6 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Enter a parse tree produced by SubsetJavaScriptParser#unary_arithmetic.
     def enterUnary_arithmetic(self, ctx: SubsetJavaScriptParser.Unary_arithmeticContext):
-        print(ctx.parentCtx)
         if not self.ternary_statement_flag:
             if ctx.UNARY_INCREMENT() != None:
                 self.output.write("%s += 1" % (ctx.VARIABLE()))
@@ -145,7 +145,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
     # Enter a parse tree produced by SubsetJavaScriptParser#ternary_statement.
     def enterTernary_statement(self, ctx: SubsetJavaScriptParser.Ternary_statementContext):
         self.ternary_statement_flag = True
-        condition = ctx.condition().getText()
+        condition = ctx.children[0].getText()
         statement1 = self.processStatement(ctx.statement()[0])
         statement2 = self.processStatement(ctx.statement()[1])
 
@@ -283,9 +283,10 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Enter a parse tree produced by SubsetJavaScriptParser#function_call.
     def enterFunction_call(self, ctx: SubsetJavaScriptParser.Function_callContext):
-        self.output.write(ctx.getText())
-        if self.if_statement:
-            self.output.write(":\n")
+        if not self.console_log_statement:
+            self.output.write(ctx.getText())
+            if self.if_statement:
+                self.output.write(":\n")
 
     # Enter a parse tree produced by SubsetJavaScriptParser#return_statement.
     def enterReturn_statement(self, ctx: SubsetJavaScriptParser.Return_statementContext):
@@ -298,6 +299,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Enter a parse tree produced by SubsetJavaScriptParser#console_log.
     def enterConsole_log(self, ctx: SubsetJavaScriptParser.Console_logContext):
+        self.console_log_statement = True
         if ctx.arithmetic():
             self.output.write("print(")
             
@@ -314,6 +316,7 @@ class JavaScript2PythonTranspiler(SubsetJavaScriptListener):
 
     # Exit a parse tree produced by SubsetJavaScriptParser#console_log.
     def exitConsole_log(self, ctx: SubsetJavaScriptParser.Console_logContext):
+        self.console_log_statement = False
         if ctx.arithmetic():
             self.output.write(")")
             pass

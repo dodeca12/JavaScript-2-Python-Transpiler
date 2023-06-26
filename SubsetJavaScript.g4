@@ -25,11 +25,14 @@ statement: (
 
 condition: expression (relop expression)*;
 
-conditional_statement: if_statement (else_if_statement)* (else_statement)?;
+conditional_statement:
+	if_statement (else_if_statement)* (else_statement)?;
 
-if_statement: IF '(' (bool | condition | function_call) ')' conditional_block;
+if_statement:
+	IF '(' (bool | condition | function_call) ')' conditional_block;
 
-else_if_statement: ELSE_IF '(' (bool | condition | function_call) ')' conditional_block;
+else_if_statement:
+	ELSE_IF '(' (bool | condition | function_call) ')' conditional_block;
 
 else_statement: ELSE conditional_block;
 
@@ -54,11 +57,13 @@ assignment: (VAR | CONST | LET) VARIABLE '=' (value | arithmetic);
 
 reassignment: VARIABLE '=' (value | arithmetic);
 
-function: FUNCTION VARIABLE '(' parameter_list ')' function_block;
+function:
+	FUNCTION VARIABLE '(' parameter_list ')' function_block;
 
 function_block: '{' NEWLINE* line* '}';
 
-return_statement: RETURN ( value | arithmetic | array_concatenation)?;
+return_statement:
+	RETURN (value | arithmetic | array_concatenation)?;
 
 parameter_list: VARIABLE? (',' VARIABLE)*;
 
@@ -92,15 +97,15 @@ array: '[' array_elements? ']';
 
 array_elements: value (',' value)*;
 
-array_operation:
-	VARIABLE '.' (PUSH | POP) '(' value? ')';
+array_operation: VARIABLE '.' (PUSH | POP) '(' value? ')';
 
 array_concatenation:
 	VARIABLE '.' 'concat' '(' array_concat_param ')';
 
 array_concat_param: (value ( ',' value)*);
 
-console_log: CONSOLE '.log' '(' ((value ( ',' value)*) | arithmetic) ')';
+console_log:
+	CONSOLE '.log' '(' ((value ( ',' value)*) | arithmetic) ')';
 
 while_loop: WHILE '(' (bool | condition) ')' loop_block;
 
@@ -108,9 +113,11 @@ for_loop: FOR '(' for_loop_statement ')' loop_block;
 
 for_loop_statement: (assignment | reassignment) ';' condition ';' arithmetic;
 
-loop_block: '{' NEWLINE* (line+ ) '}' NEWLINE*;
+loop_block: '{' NEWLINE* (line+) '}' NEWLINE*;
 
 break_statement: BREAK;
+
+
 // Lexer rules
 
 fragment LOWERCASE: [a-z];

@@ -10,4 +10,5 @@ while (x == 0) {
 
 while (true) {
     console.log("true");
+    break;
 }
